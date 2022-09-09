@@ -13,13 +13,14 @@ import ObjectiveC.runtime
 #endif
 
 public extension UIMenuItem {
-  @objc(mik_initWithTitle:image:action:)
-  convenience init(title: String, image: UIImage?, action: @escaping MenuItemAction) {
-    let title = image != nil ? title + imageItemIdetifier : title
-    self.init(title: title, action: Selector(blockIdentifierPrefix + UUID.stripedString + ":"))
-    imageBox.value = image
-    actionBox.value = action
-  }
+    @objc(mik_initWithTitle:image:tintColor:action:)
+    convenience init(title: String, image: UIImage?, tintColor: UIColor?=nil, action: @escaping MenuItemAction) {
+        let title = image != nil ? title + imageItemIdetifier : title
+        self.init(title: title, action: Selector(blockIdentifierPrefix + UUID.stripedString + ":"))
+        imageBox.value = image
+        tintColorBox.value = tintColor
+        actionBox.value = action
+    }
 
   @objc(mik_initWithTitle:action:)
   convenience init(title: String, action: @escaping MenuItemAction) {

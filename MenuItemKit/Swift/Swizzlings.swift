@@ -191,6 +191,7 @@ private extension UILabel {
           y: (label.bounds.height - image.size.height) / 2)
         let imageView: Box<UIImageView> = label.associatedBoxForKey(#function, initialValue: { [weak label] in
           let imgView = UIImageView(frame: .zero)
+            imgView.tintColor = item.tintColorBox.value ?? .white
           label?.addSubview(imgView)
           return imgView
         }())

@@ -17,45 +17,49 @@ let imageItemIdetifier = "\u{FEFF}\u{200B}"
 let blockIdentifierPrefix = "_menuitemkit_block_"
 
 func setNewIMPWithBlock<T>(_ block: T, forSelector selector: Selector, toClass klass: AnyClass) {
-  let method = class_getInstanceMethod(klass, selector)
-  let imp = imp_implementationWithBlock(unsafeBitCast(block, to: AnyObject.self))
-  if !class_addMethod(klass, selector, imp, method_getTypeEncoding(method!)) {
-    method_setImplementation(method!, imp)
-  }
+    let method = class_getInstanceMethod(klass, selector)
+    let imp = imp_implementationWithBlock(unsafeBitCast(block, to: AnyObject.self))
+    if !class_addMethod(klass, selector, imp, method_getTypeEncoding(method!)) {
+        method_setImplementation(method!, imp)
+    }
 }
 
 @nonobjc extension NSObject {
-  var imageBox: Box<UIImage?> {
-    let key: StaticString = #function
-    return associatedBoxForKey(key, initialValue: nil)
-  }
-
-  var actionBox: Box<MenuItemAction?> {
-    let key: StaticString = #function
-    return associatedBoxForKey(key, initialValue: nil)
-  }
-
-  var actionFilterBox: Box<ActionFilter?> {
-    let key: StaticString = #function
-    return associatedBoxForKey(key, initialValue: nil)
-  }
-
-  func associatedBoxForKey<T>(_ key: StaticString, initialValue: @autoclosure () -> T) -> Box<T> {
-    guard let box = objc_getAssociatedObject(self, key.utf8Start) as? Box<T> else {
-      let box = Box(initialValue())
-      objc_setAssociatedObject(self, key.utf8Start, box as AnyObject, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-      return box
+    var imageBox: Box<UIImage?> {
+        let key: StaticString = #function
+        return associatedBoxForKey(key, initialValue: nil)
     }
-
-    return box
-  }
+    
+    var actionBox: Box<MenuItemAction?> {
+        let key: StaticString = #function
+        return associatedBoxForKey(key, initialValue: nil)
+    }
+    var tintColorBox: Box<UIColor?> {
+        let key: StaticString = #function
+        return associatedBoxForKey(key, initialValue: nil)
+    }
+    
+    var actionFilterBox: Box<ActionFilter?> {
+        let key: StaticString = #function
+        return associatedBoxForKey(key, initialValue: nil)
+    }
+    
+    func associatedBoxForKey<T>(_ key: StaticString, initialValue: @autoclosure () -> T) -> Box<T> {
+        guard let box = objc_getAssociatedObject(self, key.utf8Start) as? Box<T> else {
+            let box = Box(initialValue())
+            objc_setAssociatedObject(self, key.utf8Start, box as AnyObject, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            return box
+        }
+        
+        return box
+    }
 }
 
 // MARK: Box wrapper
 final class Box<T> {
-  var value: T
-
-  init(_ val: T) {
-    value = val
-  }
+    var value: T
+    
+    init(_ val: T) {
+        value = val
+    }
 }
